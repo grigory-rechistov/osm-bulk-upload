@@ -40,7 +40,7 @@ def osmsort(tree, order):
 try:
     if len(sys.argv) != 2:
         sys.stderr.write("Synopsis:\n")
-        sys.stderr.write("    %s <file-name.osm>\n", (sys.argv[0],))
+        sys.stderr.write("    %s <file-name.osm>\n" % (sys.argv[0],))
         sys.exit(1)
 
     filename = sys.argv[1]
