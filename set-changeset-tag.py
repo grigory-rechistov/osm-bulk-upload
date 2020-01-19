@@ -49,7 +49,7 @@ class HTTPError(Exception):
     pass
 
 class OSM_API(object):
-    url = 'http://api.openstreetmap.org/'
+    url = 'https://api.openstreetmap.org/'
     def __init__(self, username = None, password = None):
         if username and password:
             self.username = username
@@ -101,7 +101,7 @@ class OSM_API(object):
     def _run_request(self, method, url, body = None, progress = 0, content_type = "text/xml"):
         url = urlparse.urljoin(self.url, url)
         purl = urlparse.urlparse(url)
-        if purl.scheme != "http":
+        if purl.scheme != "https":
             raise ValueError, "Unsupported url scheme: %r" % (purl.scheme,)
         if ":" in purl.netloc:
             host, port = purl.netloc.split(":", 1)
@@ -123,7 +123,7 @@ class OSM_API(object):
 
         try:
             self.msg(u"connecting")
-            conn = httplib.HTTPConnection(host, port)
+            conn = httplib.HTTPSConnection(host, port)
 #            conn.set_debuglevel(10)
 
             if try_no_auth:
@@ -136,7 +136,7 @@ class OSM_API(object):
                 if try_no_auth:
                     conn.close()
                     self.msg(u"re-connecting")
-                    conn = httplib.HTTPConnection(host, port)
+                    conn = httplib.HTTPSConnection(host, port)
 #                    conn.set_debuglevel(10)
 
                 creds = self.username + ":" + self.password
@@ -151,8 +151,8 @@ class OSM_API(object):
                 sys.stderr.flush()
                 response_body = response.read()
             else:
-                raise HTTPError, "%02i: %s (%s)" % (response.status,
-                        response.reason, response.read())
+                raise HTTPError( "%02i: %s (%s)" % (response.status,
+                        response.reason, response.read()))
         finally:
             conn.close()
         return response_body
@@ -243,7 +243,7 @@ try:
     api.get_changeset_tags()
     api.tags.update(zip(args[1::2], args[2::2]))
     api.set_changeset_tags()
-except HTTPError, err:
+except HTTPError as err:
     print >>sys.stderr, err
     sys.exit(1)
 except Exception,err:

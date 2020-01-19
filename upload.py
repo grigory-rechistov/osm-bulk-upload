@@ -165,7 +165,6 @@ class OSM_API(object):
 #       ElementTree.SubElement(element, "tag", {"k": "reviewed", "v": "yes"})
 #       ElementTree.SubElement(element, "tag", {"k": "revert", "v": "yes"})
 #       ElementTree.SubElement(element, "tag", {"k": "bot", "v": "yes"})
-#       ElementTree.SubElement(element, "tag", {"k": "url", "v": "http://www.openstreetmap.org/user/nmixter/diary/8218"})
         body = ElementTree.tostring(root, "utf-8")
         reply = self._run_request("PUT", "/api/0.6/changeset/create", body)
         changeset = int(reply.strip())

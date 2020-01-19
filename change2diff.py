@@ -20,7 +20,7 @@
 """
 Generate a .diff.xml file (the response from the server after a diff upload)
 from an uploaded changeset file (downloadable through
-http://www.openstreetmap.org/api/0.6/changeset/<id>/download) -- this is
+https://www.openstreetmap.org/api/0.6/changeset/<id>/download) -- this is
 useful if the network connection broke after uploading the changeset but
 before receiving the server response.
 """
