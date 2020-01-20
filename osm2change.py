@@ -1,5 +1,4 @@
-#! /usr/bin/python3
-# vim: fileencoding=utf-8 encoding=utf-8 et sw=4
+#! /usr/bin/env python3
 
 # Copyright (C) 2009 Jacek Konieczny <jajcus@jajcus.net>
 # Copyright (C) 2009 Andrzej Zaborowski <balrogg@gmail.com>
@@ -19,10 +18,8 @@
 
 
 """
-Convert .osm files to osmChange 0.3 format.
+Convert .osm files to osmChange 0.6
 """
-
-__version__ = "$Revision: 21 $"
 
 import os
 import sys
@@ -58,7 +55,7 @@ try:
         sys.stderr.write("File %s is not a v0.6 osm file!\n" % (filename,))
         sys.exit(1)
 
-    output_attr = {"version": "0.3", "generator": root.attrib.get("generator")}
+    output_attr = {"version": "0.6", "generator": root.attrib.get("generator")}
     output_root = ElementTree.Element("osmChange", output_attr)
     output_tree = ElementTree.ElementTree(output_root)
 
