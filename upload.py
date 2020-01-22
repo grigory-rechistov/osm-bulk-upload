@@ -163,7 +163,7 @@ class OSM_API(object):
         body = ElementTree.tostring(root, "utf-8")
         reply = self._run_request("PUT", "/api/0.6/changeset/create", body)
         changeset = int(reply.strip())
-        self.msg("done. Id: %i" % (changeset))
+        self.msg("done.\nChangeset ID: %i" % (changeset))
         sys.stderr.write("\n")
         self.changeset = changeset
 
