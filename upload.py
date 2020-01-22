@@ -149,7 +149,7 @@ class OSM_API(object):
             conn.close()
         return response_body
 
-    def create_changeset(self, created_by, comment):
+    def create_changeset(self, created_by, comment, source):
         if self.changeset is not None:
             raise RuntimeError("Changeset already opened")
         self.progress_msg = "I'm creating the changeset"
@@ -159,12 +159,7 @@ class OSM_API(object):
         element = ElementTree.SubElement(root, "changeset")
         ElementTree.SubElement(element, "tag", {"k": "created_by", "v": created_by})
         ElementTree.SubElement(element, "tag", {"k": "comment", "v": comment})
-#       ElementTree.SubElement(element, "tag", {"k": "import", "v": "yes"})
-        ElementTree.SubElement(element, "tag", {"k": "source", "v": "Bing"})
-#       ElementTree.SubElement(element, "tag", {"k": "merged", "v": "no - possible duplicates (will be resolved in following changesets)"})
-#       ElementTree.SubElement(element, "tag", {"k": "reviewed", "v": "yes"})
-#       ElementTree.SubElement(element, "tag", {"k": "revert", "v": "yes"})
-#       ElementTree.SubElement(element, "tag", {"k": "bot", "v": "yes"})
+        ElementTree.SubElement(element, "tag", {"k": "source", "v": source})
         body = ElementTree.tostring(root, "utf-8")
         reply = self._run_request("PUT", "/api/0.6/changeset/create", body)
         changeset = int(reply.strip())
@@ -242,6 +237,12 @@ try:
         elif arg == "-t":
             param['try'] = 1
             skip = 0
+        elif arg == "-x":
+            param['created_by'] = sys.argv[num + 1]
+            skip = 1
+        elif arg == "-y":
+            param['source'] = sys.argv[num + 1]
+            skip = 1
         else:
             filenames.append(arg)
 
@@ -318,10 +319,12 @@ try:
             sys.stderr.write("Skipping...\n\n")
             continue
         sys.stderr.write("\n")
+        created_by = param.get("created_by", "JOSM/1.5 (13367 en)")
+        source = param.get("source", "survey")
         if 'changeset' in param:
             api.changeset = int(param['changeset'])
         else:
-            api.create_changeset("JOSM/1.5 (15628 en)" , comment)
+            api.create_changeset(created_by, comment, source)
             if 'start' in param:
                 print(api.changeset)
                 sys.exit(0)
