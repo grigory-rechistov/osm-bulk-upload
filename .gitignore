@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.swp
+.mypy_cache/
+*.osc
+*.xml
