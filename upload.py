@@ -203,10 +203,6 @@ try:
         version = int(subprocess.Popen(["svnversion", this_dir], stdout = subprocess.PIPE).communicate()[0].strip())
     except:
         version = 1
-    if len(sys.argv) < 2:
-        sys.stderr.write("Synopsis:\n")
-        sys.stderr.write("    %s <file-name.osc> [<file-name.osc>...]\n" % (sys.argv[0],))
-        sys.exit(1)
 
     filenames = []
     param = {}
@@ -251,6 +247,11 @@ try:
         else:
             filenames.append(arg)
 
+    if len(filenames) < 1:
+        sys.stderr.write("Synopsis:\n")
+        sys.stderr.write("    %s -y <source_type> <file-name.osc> [<file-name.osc>...]\n" % (sys.argv[0],))
+        sys.exit(1)
+
     if 'user' in param:
         login = param['user']
     else:
@@ -265,6 +266,9 @@ try:
         sys.exit(1)
 
     api = OSM_API(login, password)
+
+    if not 'source' in param:
+        param['source'] = input("Source type (https://wiki.openstreetmap.org/wiki/Key:source) : ")
 
     changes = []
     for filename in filenames:
