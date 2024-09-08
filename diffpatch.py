@@ -1,5 +1,5 @@
 #! /usr/bin/python2
-# vim: fileencoding=utf-8 encoding=utf-8 et sw=4
+# vim: file encoding=utf-8 et sw=4
 
 # Copyright (C) 2009 Jacek Konieczny <jajcus@jajcus.net>
 # Copyright (C) 2009 Andrzej Zaborowski <balrogg@gmail.com>
