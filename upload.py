@@ -149,7 +149,7 @@ class OSM_API(object):
             conn.close()
         return response_body
 
-    def create_changeset(self, created_by, comment, source, url):
+    def create_changeset(self, created_by, comment, source, url, isImport):
         if self.changeset is not None:
             raise RuntimeError("Changeset already opened")
         self.progress_msg = "I'm creating the changeset"
@@ -158,7 +158,8 @@ class OSM_API(object):
         tree = ElementTree.ElementTree(root)
         element = ElementTree.SubElement(root, "changeset")
         ElementTree.SubElement(element, "tag", {"k": "url", "v": url})
-        ElementTree.SubElement(element, "tag", {"k": "import", "v": "yes"})
+        if isImport:
+            ElementTree.SubElement(element, "tag", {"k": "import", "v": "yes"})
         ElementTree.SubElement(element, "tag", {"k": "created_by", "v": created_by})
         ElementTree.SubElement(element, "tag", {"k": "comment", "v": comment})
         ElementTree.SubElement(element, "tag", {"k": "source", "v": source})
@@ -244,6 +245,9 @@ try:
         elif arg == "-z":
             param['url'] = sys.argv[num + 1]
             skip = 1
+        elif arg == "-i":
+            param['import'] = 1
+            skip = 0
         else:
             filenames.append(arg)
 
@@ -331,10 +335,11 @@ try:
         created_by = param.get("created_by", "osm-bulk-upload/upload.py v. %s" % (version,))
         source = param.get("source", "survey")
         url = param.get("url", "")
+        isImport = 'import' in param
         if 'changeset' in param:
             api.changeset = int(param['changeset'])
         else:
-            api.create_changeset(created_by, comment, source, url)
+            api.create_changeset(created_by, comment, source, url, isImport)
             if 'start' in param:
                 print(api.changeset)
                 sys.exit(0)
